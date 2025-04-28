@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "nodemon": "nodemon dist/index.js",
     "prebuild": "rm -rf dist/*",
-    "build": "tsc",
+    "build": "npx tsc",
     "prestart": "npm run build",
     "start": "node dist/index.js"
   },
