@@ -5,9 +5,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "nodemon": "nodemon dist/index.js",
-    "prebuild": "rm -rf dist/*",
-    "build": "tsc",
-    "prestart": "npm run build",
     "start": "node dist/index.js"
   },
   "keywords": [],
@@ -15,8 +12,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@types/express": "^5.0.1",
-    "typescript": "^5.8.3"
+    "@types/express": "^5.0.1"
   },
   "dependencies": {
     "dotenv": "^16.5.0",
@@ -24,6 +20,7 @@
     "i": "^0.3.7",
     "node-fetch": "^3.3.2",
     "nodemon": "^3.1.10",
-    "npm": "^11.3.0"
+    "npm": "^11.3.0",
+    "typescript": "^5.8.3"
   }
 }
