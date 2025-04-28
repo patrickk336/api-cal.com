@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
  res.send('Hello Beautiful');
 });
 
-const PORT = 3000;
+const PORT = 5000;
 app.listen(PORT, () => {
  console.log(`App running on port ${PORT}`);
 });
