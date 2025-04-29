@@ -105,18 +105,32 @@ const scheduleCalCom = (req, res) => __awaiter(void 0, void 0, void 0, function*
             res.status(400).json({ error: 'Date query parameter is required' });
             return;
         }
+        const time = reqBody.time;
+        let [hour, minute] = time.split(':').map(Number);
+        hour = (hour - 3) % 24;
+        const formattedTime = `${reqBody.date}T${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:00.000Z`;
+        const calBody = {
+            attendee: {
+                language: reqBody.language,
+                name: reqBody.name,
+                timeZone: reqBody.timeZone,
+                email: reqBody.email,
+            },
+            start: formattedTime,
+            eventTypeId: reqBody.eventTypeId,
+        };
         const options = {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
                 'cal-api-version': '2024-08-13',
             },
-            body: JSON.stringify(reqBody),
+            body: JSON.stringify(calBody),
         };
         console.log('options: ', options);
         const url = 'https://api.cal.com/v2/bookings';
         console.log('url: ', url);
-        console.log('reqBody: ', reqBody);
+        console.log('reqBody: ', calBody);
         const response = yield (0, node_fetch_1.default)(url, options);
         const data = yield response.json();
         if (!response.ok) {

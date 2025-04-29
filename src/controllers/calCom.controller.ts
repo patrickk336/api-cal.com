@@ -109,18 +109,35 @@ export const scheduleCalCom = async (req: Request, res: Response) => {
       return;
     }
 
+    const time = reqBody.time as string;
+    let [hour, minute] = time.split(':').map(Number);
+
+    hour = (hour - 3) % 24;
+
+    const formattedTime = `${reqBody.date}T${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:00.000Z`;
+
+    const calBody = {
+      attendee: {
+        language: reqBody.language,
+        name: reqBody.name,
+        timeZone: reqBody.timeZone,
+        email: reqBody.email,
+      },
+      start: formattedTime,
+      eventTypeId: reqBody.eventTypeId,
+    }
     const options = {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
         'cal-api-version': '2024-08-13',
       },
-      body: JSON.stringify(reqBody),
+      body: JSON.stringify(calBody),
     };
     console.log('options: ', options);
     const url = 'https://api.cal.com/v2/bookings';
     console.log('url: ', url);
-    console.log('reqBody: ', reqBody);
+    console.log('reqBody: ', calBody);
 
     const response: any = await fetch(url, options);
     const data: any = await response.json();
