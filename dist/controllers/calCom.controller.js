@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCalComAvailableSlotTimes = exports.getCalCom = void 0;
+exports.scheduleCalCom = exports.getCalComAvailableSlotTimes = exports.getCalCom = void 0;
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const dates_1 = require("../utils/dates");
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -76,7 +76,11 @@ const getCalComAvailableSlotTimes = (req, res) => __awaiter(void 0, void 0, void
         for (const date in data.data) {
             const slots = data.data[date];
             for (const slot of slots) {
-                const time = new Date(slot.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const time = new Date(slot.start).toLocaleTimeString('en-GB', {
+                    timeZone: 'Asia/Beirut',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                });
                 times.push(time);
             }
         }
@@ -91,3 +95,41 @@ const getCalComAvailableSlotTimes = (req, res) => __awaiter(void 0, void 0, void
     }
 });
 exports.getCalComAvailableSlotTimes = getCalComAvailableSlotTimes;
+const scheduleCalCom = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!process.env.CALCOM_AUTHORIZATION) {
+            throw new Error('CALCOM_AUTHORIZATION is not set in the environment variables.');
+        }
+        const reqBody = req.body;
+        if (!reqBody) {
+            res.status(400).json({ error: 'Date query parameter is required' });
+            return;
+        }
+        const options = {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                'cal-api-version': '2024-08-13',
+            },
+            body: JSON.stringify(reqBody),
+        };
+        console.log('options: ', options);
+        const url = 'https://api.cal.com/v2/bookings';
+        console.log('url: ', url);
+        console.log('reqBody: ', reqBody);
+        const response = yield (0, node_fetch_1.default)(url, options);
+        const data = yield response.json();
+        if (!response.ok) {
+            res.status(500).json({ error: 'Failed to fetch data', details: data });
+            return;
+        }
+        res.status(200).json({ 'success: ': data });
+    }
+    catch (error) {
+        console.error('Error:', error.message);
+        if (!res.headersSent) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+});
+exports.scheduleCalCom = scheduleCalCom;
