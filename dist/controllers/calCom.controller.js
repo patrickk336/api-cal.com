@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCalCom = void 0;
+exports.getCalComAvailableSlotTimes = exports.getCalCom = void 0;
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const dates_1 = require("../utils/dates");
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -45,3 +45,49 @@ const getCalCom = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getCalCom = getCalCom;
+const getCalComAvailableSlotTimes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!process.env.CALCOM_AUTHORIZATION) {
+            throw new Error('CALCOM_AUTHORIZATION is not set in the environment variables.');
+        }
+        const date = req.query.date;
+        console.log('date: ', date);
+        if (!date) {
+            res.status(400).json({ error: 'Date query parameter is required' });
+            return;
+        }
+        const options = {
+            method: 'GET',
+            headers: {
+                Authorization: process.env.CALCOM_AUTHORIZATION,
+                'cal-api-version': '2024-09-04',
+            },
+        };
+        const url = `https://api.cal.com/v2/slots?eventTypeId=${process.env.CALCOM_EVENT_ID}&start=${date}&end=${date}`;
+        const response = yield (0, node_fetch_1.default)(url, options);
+        const data = yield response.json();
+        if (!response.ok) {
+            console.error(`Cal.com API error. Status: ${response.status}`);
+            console.error('Response body:', data);
+            res.status(500).json({ error: 'Failed to fetch data', details: data });
+            return;
+        }
+        const times = [];
+        for (const date in data.data) {
+            const slots = data.data[date];
+            for (const slot of slots) {
+                const time = new Date(slot.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                times.push(time);
+            }
+        }
+        console.log(times);
+        res.status(200).json({ times });
+    }
+    catch (error) {
+        console.error('Error:', error.message);
+        if (!res.headersSent) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+});
+exports.getCalComAvailableSlotTimes = getCalComAvailableSlotTimes;
