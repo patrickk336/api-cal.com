@@ -1,4 +1,4 @@
-import { json, Request, Response } from "express";
+import { Request, Response } from "express";
 import fetch from "node-fetch";
 import { getStartDate, getEndDate } from "../utils/dates";
 import dotenv from 'dotenv';
