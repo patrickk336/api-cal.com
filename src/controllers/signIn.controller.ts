@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../settings/appDataSource";
 
-export class signInController {
+export class UserController {
     static async signIn(req: Request, res: Response) {
         const { name, password } = req.body;
         const userRepository = AppDataSource.getRepository("User");
