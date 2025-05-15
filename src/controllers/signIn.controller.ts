@@ -14,4 +14,9 @@ export class signInController {
             res.status(401).json({ message: "Invalid credentials" });
         }
     }
+
+    static async signUp(req: Request, res: Response) {
+        const { name, password } = req.body;
+        const userRepository = AppDataSource.getRepository("User");
+    }
 }
