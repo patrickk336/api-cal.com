@@ -10,4 +10,10 @@ export class User {
 
     @Column({ type: "varchar" })
     password: string
+
+    @Column({ type: "int", nullable: true })
+    otp: number
+
+    @Column({ type: "boolean", default: false })
+    isVerified: boolean
 }
