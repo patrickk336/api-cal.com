@@ -17,8 +17,8 @@ class UserController {
     }
     static signIn(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name } = (req.body).toLowerCase();
-            const { password } = req.body;
+            let { name, password } = req.body;
+            name = name.toLowerCase();
             const userRepository = appDataSource_1.AppDataSource.getRepository("users");
             try {
                 const user = yield userRepository.findOne({ where: { name, password } });
@@ -43,8 +43,9 @@ class UserController {
     }
     static signUp(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, password } = req.body;
-            const userRepository = appDataSource_1.AppDataSource.getRepository("User");
+            let { name, password } = req.body;
+            name = name.toLowerCase();
+            const userRepository = appDataSource_1.AppDataSource.getRepository("users");
             try {
                 const existingUser = yield userRepository.findOne({ where: { name } });
                 if (existingUser) {
@@ -79,8 +80,9 @@ class UserController {
     }
     static verifyUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, otp } = req.body;
-            const userRepositry = appDataSource_1.AppDataSource.getRepository("User");
+            let { name, otp } = req.body;
+            name = name.toLowerCase();
+            const userRepositry = appDataSource_1.AppDataSource.getRepository("users");
             try {
                 const user = yield userRepositry.findOne({ where: { name } });
                 if (!user) {
