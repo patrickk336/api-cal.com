@@ -33,7 +33,7 @@ export class UserController {
 
     static async signUp(req: Request, res: Response) {
         const { name, password } = req.body;
-        const userRepository = AppDataSource.getRepository("User");
+        const userRepository = AppDataSource.getRepository("users");
         try {
             const existingUser = await userRepository.findOne({ where: { name } });
             if (existingUser) {
@@ -65,7 +65,7 @@ export class UserController {
 
     static async verifyUser(req: Request, res: Response) {
         const { name, otp } = req.body;
-        const userRepositry = AppDataSource.getRepository("User");
+        const userRepositry = AppDataSource.getRepository("users");
         try {
             const user = await userRepositry.findOne({ where: { name } });
             if (!user) {
