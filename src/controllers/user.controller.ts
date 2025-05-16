@@ -9,7 +9,7 @@ export class UserController {
     static async signIn(req: Request, res: Response) {
         const { name } = (req.body).toLowerCase();
         const { password } = req.body;
-        const userRepository = AppDataSource.getRepository("User");
+        const userRepository = AppDataSource.getRepository("users");
         try {
             const user = await userRepository.findOne({ where : { name, password } });
 

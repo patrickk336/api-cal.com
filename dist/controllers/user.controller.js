@@ -19,7 +19,7 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             const { name } = (req.body).toLowerCase();
             const { password } = req.body;
-            const userRepository = appDataSource_1.AppDataSource.getRepository("User");
+            const userRepository = appDataSource_1.AppDataSource.getRepository("users");
             try {
                 const user = yield userRepository.findOne({ where: { name, password } });
                 if (user) {
