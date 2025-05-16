@@ -7,8 +7,8 @@ export class UserController {
     }
 
     static async signIn(req: Request, res: Response) {
-        const { name } = (req.body).toLowerCase();
-        const { password } = req.body;
+        let { name, password } = req.body;
+        name = name.toLowerCase();
         const userRepository = AppDataSource.getRepository("users");
         try {
             const user = await userRepository.findOne({ where : { name, password } });
@@ -32,7 +32,8 @@ export class UserController {
     }
 
     static async signUp(req: Request, res: Response) {
-        const { name, password } = req.body;
+        let { name, password } = req.body;
+        name = name.toLowerCase();
         const userRepository = AppDataSource.getRepository("users");
         try {
             const existingUser = await userRepository.findOne({ where: { name } });
@@ -64,7 +65,8 @@ export class UserController {
     }
 
     static async verifyUser(req: Request, res: Response) {
-        const { name, otp } = req.body;
+        let { name, otp } = req.body;
+        name = name.toLowerCase();
         const userRepositry = AppDataSource.getRepository("users");
         try {
             const user = await userRepositry.findOne({ where: { name } });
