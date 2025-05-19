@@ -12,17 +12,23 @@ export class UserController {
         const userRepository = AppDataSource.getRepository("users");
         try {
             const user = await userRepository.findOne({ where : { name, password: password } });
-            if(user) {
+            if(user && user.isVerified) {
                 res.status(200).json({ 
                     message: "User authenticated successfully",
                     success: "true"
                 });
             }
-            else {
+            else if(user && !user.isVerified) {
+                await userRepository.update({ name }, { otp: UserController.otpGenerator(100000, 999999) });
                 res.status(401).json({ 
                     message: "Invalid credentials",
                     success: "false"
                 });
+            } else {
+                res.status(401).json({
+                    message: "Invalid credentials",
+                    success: "false"
+                })
             }
         } catch (error) {
             console.error("Error during authentication:", error);
