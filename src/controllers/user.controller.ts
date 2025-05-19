@@ -83,7 +83,7 @@ export class UserController {
                     success: "false2"
                 });
             } else {
-                await userRepositry.update({ where: { name } }, { isVerified: true });
+                await userRepositry.update({ name }, { isVerified: true });
                 res.status(200).json({ 
                     message: "User verified successfully",
                     success: "true"

@@ -100,7 +100,7 @@ class UserController {
                     });
                 }
                 else {
-                    yield userRepositry.update({ where: { name } }, { isVerified: true });
+                    yield userRepositry.update({ name }, { isVerified: true });
                     res.status(200).json({
                         message: "User verified successfully",
                         success: "true"
