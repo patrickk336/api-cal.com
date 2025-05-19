@@ -22,12 +22,12 @@ export class UserController {
                 await userRepository.update({ name }, { otp: UserController.otpGenerator(100000, 999999) });
                 res.status(401).json({ 
                     message: "Invalid credentials",
-                    success: "false"
+                    success: "false1"
                 });
             } else {
                 res.status(401).json({
                     message: "Invalid credentials",
-                    success: "false"
+                    success: "false2"
                 })
             }
         } catch (error) {
