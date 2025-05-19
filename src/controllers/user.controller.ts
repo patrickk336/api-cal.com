@@ -32,7 +32,7 @@ export class UserController {
     }
 
     static async signUp(req: Request, res: Response) {
-        let { name, password, userOtp } = req.body;
+        let { name, password } = req.body;
         name = name.toLowerCase();
         const userRepository = AppDataSource.getRepository("users");
         try {
@@ -45,34 +45,18 @@ export class UserController {
             } else if (existingUser && !existingUser.isVerified) {
                 const otp = this.otpGenerator(100000, 999999);
                 await userRepository.update({ where: { name } }, { otp });
-                if (userOtp !== otp) {
-                    res.status(401).json({
-                        message: "Invalid OTP",
-                        success: "false"
-                    })
-                } else {
-                    await userRepository.update({ where: { name }}, { isVerified: true });
-                    res.status(201).json({ 
+                res.status(201).json({ 
                     message: "User created successfully",
                     success: "true",
                  });
-                }
             } else {
                 const otp = this.otpGenerator(100000, 999999);
                 const newUser = await userRepository.create({ name, password, otp });
                 await userRepository.save(newUser);
-                if (userOtp !== otp) {
-                    res.status(401).json({
-                        message: "Invalid OTP",
-                        success: "false"
-                    })
-                } else {
-                    await userRepository.update({ where: { name }}, { isVerified: true });
-                    res.status(201).json({ 
-                        message: "User created successfully",
-                        success: "true",
-                     });
-                }
+                res.status(201).json({ 
+                    message: "User created successfully",
+                    success: "true",
+                 });
             }
         } catch (error) {
             console.error("Error creating user:", error);

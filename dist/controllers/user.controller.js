@@ -43,7 +43,7 @@ class UserController {
     }
     static signUp(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            let { name, password, userOtp } = req.body;
+            let { name, password } = req.body;
             name = name.toLowerCase();
             const userRepository = appDataSource_1.AppDataSource.getRepository("users");
             try {
@@ -57,37 +57,19 @@ class UserController {
                 else if (existingUser && !existingUser.isVerified) {
                     const otp = this.otpGenerator(100000, 999999);
                     yield userRepository.update({ where: { name } }, { otp });
-                    if (userOtp !== otp) {
-                        res.status(401).json({
-                            message: "Invalid OTP",
-                            success: "false"
-                        });
-                    }
-                    else {
-                        yield userRepository.update({ where: { name } }, { isVerified: true });
-                        res.status(201).json({
-                            message: "User created successfully",
-                            success: "true",
-                        });
-                    }
+                    res.status(201).json({
+                        message: "User created successfully",
+                        success: "true",
+                    });
                 }
                 else {
                     const otp = this.otpGenerator(100000, 999999);
                     const newUser = yield userRepository.create({ name, password, otp });
                     yield userRepository.save(newUser);
-                    if (userOtp !== otp) {
-                        res.status(401).json({
-                            message: "Invalid OTP",
-                            success: "false"
-                        });
-                    }
-                    else {
-                        yield userRepository.update({ where: { name } }, { isVerified: true });
-                        res.status(201).json({
-                            message: "User created successfully",
-                            success: "true",
-                        });
-                    }
+                    res.status(201).json({
+                        message: "User created successfully",
+                        success: "true",
+                    });
                 }
             }
             catch (error) {
