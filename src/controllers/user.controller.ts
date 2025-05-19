@@ -38,17 +38,19 @@ export class UserController {
         try {
             const existingUser = await userRepository.findOne({ where: { name } });
             if (existingUser) {
+            if (!existingUser.isVerified) {
+                const otp = this.otpGenerator(100000, 999999);
+                await userRepository.update({ name }, { otp });
+                res.status(201).json({ 
+                    message: "OTP re-sent to existing unverified user",
+                    success: "true",
+                });
+            } else {
                 res.status(409).json({ 
                     message: "User already exists",
                     success: "false"
-                 });
-            } else if (existingUser && !existingUser.isVerified) {
-                const otp = this.otpGenerator(100000, 999999);
-                await userRepository.update({ where: { name } }, { otp });
-                res.status(201).json({ 
-                    message: "User created successfully",
-                    success: "true",
-                 });
+                });
+            }
             } else {
                 const otp = this.otpGenerator(100000, 999999);
                 const newUser = await userRepository.create({ name, password, otp });
