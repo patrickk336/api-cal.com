@@ -11,8 +11,7 @@ export class UserController {
         name = name.toLowerCase();
         const userRepository = AppDataSource.getRepository("users");
         try {
-            const user = await userRepository.findOne({ where : { name, password } });
-
+            const user = await userRepository.findOne({ where : { name, password: password } });
             if(user) {
                 res.status(200).json({ 
                     message: "User authenticated successfully",
