@@ -39,7 +39,7 @@ export class UserController {
             const existingUser = await userRepository.findOne({ where: { name } });
             if (existingUser) {
             if (!existingUser.isVerified) {
-                const otp = this.otpGenerator(100000, 999999);
+                const otp = UserController.otpGenerator(100000, 999999);
                 await userRepository.update({ name }, { otp });
                 res.status(201).json({ 
                     message: "OTP re-sent to existing unverified user",
@@ -52,7 +52,7 @@ export class UserController {
                 });
             }
             } else {
-                const otp = this.otpGenerator(100000, 999999);
+                const otp = UserController.otpGenerator(100000, 999999);
                 const newUser = await userRepository.create({ name, password, otp });
                 await userRepository.save(newUser);
                 res.status(201).json({ 

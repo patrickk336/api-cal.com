@@ -50,7 +50,7 @@ class UserController {
                 const existingUser = yield userRepository.findOne({ where: { name } });
                 if (existingUser) {
                     if (!existingUser.isVerified) {
-                        const otp = this.otpGenerator(100000, 999999);
+                        const otp = UserController.otpGenerator(100000, 999999);
                         yield userRepository.update({ name }, { otp });
                         res.status(201).json({
                             message: "OTP re-sent to existing unverified user",
@@ -65,7 +65,7 @@ class UserController {
                     }
                 }
                 else {
-                    const otp = this.otpGenerator(100000, 999999);
+                    const otp = UserController.otpGenerator(100000, 999999);
                     const newUser = yield userRepository.create({ name, password, otp });
                     yield userRepository.save(newUser);
                     res.status(201).json({
