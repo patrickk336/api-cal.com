@@ -86,14 +86,23 @@ class UserController {
             try {
                 const user = yield userRepositry.findOne({ where: { name } });
                 if (!user) {
-                    res.status(404).json({ message: "User not found" });
+                    res.status(404).json({
+                        message: "User not found",
+                        success: "false1"
+                    });
                 }
                 else if (user.otp !== otp) {
-                    res.status(401).json({ message: "Invalid OTP" });
+                    res.status(401).json({
+                        message: "Invalid OTP",
+                        success: "false2"
+                    });
                 }
                 else {
                     yield userRepositry.update({ where: { name } }, { isVerified: true });
-                    res.status(200).json({ message: "User verified successfully" });
+                    res.status(200).json({
+                        message: "User verified successfully",
+                        success: "true"
+                    });
                 }
             }
             catch (error) {
