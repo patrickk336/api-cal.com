@@ -25,10 +25,12 @@ class n8nTestingController {
                     return res.status(404).json({ message: "No grades found for this student" });
                 }
                 const formattedGrades = {
-                    student_id: studentId,
-                    grades: grades.map(grade => ({
-                        [grade.title]: grade.grade
-                    }))
+                    output: {
+                        student_id: studentId,
+                        grades: grades.map(g => ({
+                            [g.title]: g.grade
+                        }))
+                    }
                 };
                 res.status(200).json(formattedGrades);
             }
