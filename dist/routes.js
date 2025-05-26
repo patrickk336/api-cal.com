@@ -6,8 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const calcom_routes_1 = __importDefault(require("./routes/calcom.routes"));
 const user_routes_1 = __importDefault(require("./routes/user.routes"));
+const n8nTesting_routes_1 = __importDefault(require("./routes/n8nTesting.routes"));
 exports.default = (app) => {
     app.use(express_1.default.json());
     app.use('/api/calcom', calcom_routes_1.default);
     app.use('/api/user', user_routes_1.default);
+    app.use('/api/n8n-testing', n8nTesting_routes_1.default);
 };
