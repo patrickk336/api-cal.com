@@ -25,7 +25,7 @@ class n8nTestingController {
                     return res.status(404).json({ message: "No grades found for this student" });
                 }
                 const formattedGrades = {
-                    output: {
+                    outputFromAPI: {
                         student_id: studentId,
                         grades: grades.map(g => ({
                             [g.title]: g.grade
