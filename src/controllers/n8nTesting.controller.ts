@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../settings/appDataSource";
+import { fromBase64 } from "pdf2pic";
 
 export class n8nTestingController {
     static async getGrades(req: Request, res: Response): Promise<any> {
@@ -25,6 +26,33 @@ export class n8nTestingController {
             res.status(200).json(formattedGrades);
         } catch (error) {
             console.error("Error fetching grades:", error);
+            res.status(500).json({ message: "Internal server error" });
+        }
+    }
+
+    public static async createApproval(req: Request, res: Response): Promise<any> {
+        const { apiOutput, aiOutput, score, approvalStatus } = req.body;
+
+        if (!apiOutput || !aiOutput || score === undefined || approvalStatus === undefined) {
+            return res.status(400).json({ error: "All fields are required" });
+        }
+
+        const approvalsRepository = AppDataSource.getRepository("approvals");
+        try {
+            const newApproval = approvalsRepository.create({
+                api_output: apiOutput,
+                ai_output: aiOutput,
+                score: score,
+                approval_status: approvalStatus
+            });
+            const savedApproval = await approvalsRepository.save(newApproval);
+
+            res.status(201).json({
+                message: "Approval created successfully",
+                approval: savedApproval
+            });
+        } catch (error) {
+            console.error("Error creating approval:", error);
             res.status(500).json({ message: "Internal server error" });
         }
     }

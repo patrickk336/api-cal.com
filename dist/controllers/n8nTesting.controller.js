@@ -40,5 +40,31 @@ class n8nTestingController {
             }
         });
     }
+    static createApproval(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { apiOutput, aiOutput, score, approvalStatus } = req.body;
+            if (!apiOutput || !aiOutput || score === undefined || approvalStatus === undefined) {
+                return res.status(400).json({ error: "All fields are required" });
+            }
+            const approvalsRepository = appDataSource_1.AppDataSource.getRepository("approvals");
+            try {
+                const newApproval = approvalsRepository.create({
+                    api_output: apiOutput,
+                    ai_output: aiOutput,
+                    score: score,
+                    approval_status: approvalStatus
+                });
+                const savedApproval = yield approvalsRepository.save(newApproval);
+                res.status(201).json({
+                    message: "Approval created successfully",
+                    approval: savedApproval
+                });
+            }
+            catch (error) {
+                console.error("Error creating approval:", error);
+                res.status(500).json({ message: "Internal server error" });
+            }
+        });
+    }
 }
 exports.n8nTestingController = n8nTestingController;
