@@ -68,14 +68,15 @@ class n8nTestingController {
     }
     static createImageScan(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { scanData } = req.body;
+            const { scanData, formatData } = req.body;
             if (!scanData) {
                 return res.status(400).json({ error: "Scan data is required" });
             }
             const imageScansRepository = appDataSource_1.AppDataSource.getRepository("image_scans");
             try {
                 const newScan = imageScansRepository.create({
-                    scan_data: scanData
+                    scan_data_no_format: scanData,
+                    scan_data_formatted: formatData,
                 });
                 const savedScan = yield imageScansRepository.save(newScan);
                 res.status(201).json({

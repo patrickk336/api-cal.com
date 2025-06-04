@@ -21,7 +21,11 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ type: "varchar" }),
     __metadata("design:type", String)
-], imageScans.prototype, "scan_data", void 0);
+], imageScans.prototype, "scan_data_no_format", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "varchar" }),
+    __metadata("design:type", String)
+], imageScans.prototype, "scan_data_formatted", void 0);
 exports.imageScans = imageScans = __decorate([
     (0, typeorm_1.Entity)("image_scans")
 ], imageScans);
