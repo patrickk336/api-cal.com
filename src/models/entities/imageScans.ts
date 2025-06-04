@@ -6,5 +6,8 @@ export class imageScans {
     id: number
 
     @Column({ type: "varchar" })
-    scan_data: string
+    scan_data_no_format: string
+
+    @Column({ type: "varchar" })
+    scan_data_formatted: string
 }

@@ -58,7 +58,7 @@ export class n8nTestingController {
     }
 
     public static async createImageScan(req: Request, res: Response): Promise<any> {
-        const { scanData } = req.body;
+        const { scanData, formatData } = req.body;
         if (!scanData) {
             return res.status(400).json({ error: "Scan data is required" });
         }
@@ -67,7 +67,8 @@ export class n8nTestingController {
 
         try {
             const newScan = imageScansRepository.create({
-                scan_data: scanData
+                scan_data_no_format: scanData,
+                scan_data_formatted: formatData, 
             });
 
             const savedScan = await imageScansRepository.save(newScan);
