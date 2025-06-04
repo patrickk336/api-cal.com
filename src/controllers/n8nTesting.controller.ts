@@ -56,4 +56,29 @@ export class n8nTestingController {
             res.status(500).json({ message: "Internal server error" });
         }
     }
+
+    public static async createImageScan(req: Request, res: Response): Promise<any> {
+        const { scanData } = req.body;
+        if (!scanData) {
+            return res.status(400).json({ error: "Scan data is required" });
+        }
+
+        const imageScansRepository = AppDataSource.getRepository("image_scans");
+
+        try {
+            const newScan = imageScansRepository.create({
+                scan_data: scanData
+            });
+
+            const savedScan = await imageScansRepository.save(newScan);
+
+            res.status(201).json({
+                message: "Image scan created successfully",
+                scan: savedScan
+            });
+        } catch (error) {
+            console.error("Error creating image scan:", error);
+            res.status(500).json({ message: "Internal server error" });
+        }
+    }
 }

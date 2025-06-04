@@ -66,5 +66,28 @@ class n8nTestingController {
             }
         });
     }
+    static createImageScan(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { scanData } = req.body;
+            if (!scanData) {
+                return res.status(400).json({ error: "Scan data is required" });
+            }
+            const imageScansRepository = appDataSource_1.AppDataSource.getRepository("image_scans");
+            try {
+                const newScan = imageScansRepository.create({
+                    scan_data: scanData
+                });
+                const savedScan = yield imageScansRepository.save(newScan);
+                res.status(201).json({
+                    message: "Image scan created successfully",
+                    scan: savedScan
+                });
+            }
+            catch (error) {
+                console.error("Error creating image scan:", error);
+                res.status(500).json({ message: "Internal server error" });
+            }
+        });
+    }
 }
 exports.n8nTestingController = n8nTestingController;

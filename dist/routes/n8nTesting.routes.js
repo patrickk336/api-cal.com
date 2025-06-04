@@ -8,4 +8,5 @@ const n8nTesting_controller_1 = require("../controllers/n8nTesting.controller");
 const router = express_1.default.Router();
 router.post('/', n8nTesting_controller_1.n8nTestingController.getGrades);
 router.post('/approval', n8nTesting_controller_1.n8nTestingController.createApproval);
+router.post('/image-scan', n8nTesting_controller_1.n8nTestingController.createImageScan);
 exports.default = router;
