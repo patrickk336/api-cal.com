@@ -73,6 +73,7 @@ export class n8nTestingController {
 
             const savedScan = await imageScansRepository.save(newScan);
 
+            console.log("image scan", savedScan);
             res.status(201).json({
                 message: "Image scan created successfully",
                 scan: savedScan
